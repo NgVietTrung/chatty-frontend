@@ -1,9 +1,10 @@
-import Input from '../../../components/input/Input';
-import Button from '../../../components/button/Button';
 import './Register.scss';
 import { useState, useEffect } from 'react';
-import { Utils } from '../../../services/utils/utils.service';
-import { authService } from '../../../services/api/auth/auth.service';
+import { Utils } from '@services/utils/utils.service';
+import { authService } from '@services/api/auth/auth.service';
+import Input from '@components/input/Input';
+import Button from '@components/button/Button';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -14,6 +15,7 @@ const Register = () => {
   const [alertType, setAlertType] = useState('');
   const [hasError, setHasError] = useState(false);
   const [user, setUser] = useState();
+  const navigate = useNavigate();
 
   const registerUser = async (event) => {
     setLoading(true);
@@ -30,9 +32,6 @@ const Register = () => {
       });
       console.log(result);
 
-      // 1 - set logged in to true in local storage
-      // 2 - set username in local storage
-      // 3 - dispatch user to redux
       setUser(result.data.user);
       setHasError(false);
       setAlertType('alert-success');
@@ -46,11 +45,8 @@ const Register = () => {
 
   useEffect(() => {
     if (loading && !user) return;
-    if (user) {
-      console.log('navigate to streams page');
-      setLoading(false);
-    }
-  }, [loading, user]);
+    if (user) navigate('/app/social/streams');
+  }, [loading, user, navigate]);
 
   return (
     <div className="auth-inner">
